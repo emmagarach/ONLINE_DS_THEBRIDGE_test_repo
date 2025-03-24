@@ -1,13 +1,14 @@
 #Dimensiones del tablero
 dim_tablero = 10
 
-#Barcos con su eslora y la cantidad de cada tipo
+#Barcos 
 barcos = {
-    "Portaaviones": (4,1),
-    "Acorazado": (3,2),
-    "Submarino": (2,3),
-    "Destructor": (1,4)
+    "Submarino": (4,1), 
+    "Destructor": (3,2),
+    "Acorazado": (2,3),
+    "Portaaviones": (1,4)
 }
+
 
 #Símbolos del tablero con sus significados
 simbolo_agua = "~"

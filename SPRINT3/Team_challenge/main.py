@@ -1,4 +1,4 @@
-from colorama import Fore
+from colorama import Fore,Style
 import numpy as np
 import random
 import textwrap 
@@ -103,7 +103,7 @@ def turno_jugador(tablero_jugador, tablero_maquina):
 
     elif opcion == "3":
         print("\nTu tablero actual: \n")
-        tablero_jugador.mostrar()  #Para ver cómo va la máquina
+        tablero_jugador.mostrar(tablero_jugador)  #Para ver cómo va la máquina
 
     elif opcion == "4":
         print("Saliendo del juego...")
@@ -115,7 +115,7 @@ def turno_jugador(tablero_jugador, tablero_maquina):
     return True  #Mantenemos turno si no se disparó (por ejemplo, si hemos elegido mostrar uno de los tableros)
 
 
-def turno_maquina(tablero_jugador, tablero_maquina, registro_disparos_maquina, dificultad_maquina):
+def turno_maquina(tablero_maquina, tablero_jugador, registro_disparos_maquina, dificultad_maquina):
 
     """
     Función más sencilla que desarrolla el turno de la máquina, que es aleatorio, internamente.
@@ -140,10 +140,10 @@ def turno_maquina(tablero_jugador, tablero_maquina, registro_disparos_maquina, d
 
         registro_disparos_maquina.add((x, y))  #Guardamos el disparo de la máquina en el set para no repetirlo
 
-        acierto = tablero_maquina.disparar_maquina(tablero_jugador, (x, y))
+        acierto = tablero_maquina.disparar_maquina(tablero_jugador)
 
         if acierto:
-            print("¡La máquina te ha dado!\n")
+            print(Fore.RED + "¡La máquina te ha dado!\n" + Style.RESET_ALL)
         else:
             turnos_restantes -= 1  #Si falla, descuenta un turno interno
 
@@ -169,10 +169,11 @@ def jugar(dificultad_maquina):
 
     print("¡Bienvenido a la Batalla Naval!")
 
-    tablero_jugador.mostrar()
-    tablero_jugador.generar_barcos_aleatorios()  # Para pruebas, colocar barcos automáticamente
+    tablero_jugador.mostrar(tablero_jugador)
+    tablero_jugador.colocar_barco_usuario()  # Para pruebas, colocar barcos automáticamente
     tablero_maquina.generar_barcos_aleatorios()
     
+    print()
     print("Ambos jugadores tienen los barcos colocados.")
     
     turno = True  #Comienza el usuario
@@ -183,15 +184,15 @@ def jugar(dificultad_maquina):
         if turno:
             turno = turno_jugador(tablero_jugador, tablero_maquina)
         else:
-            turno = turno_maquina(tablero_jugador, registro_disparos_maquina, dificultad_maquina)
+            turno = turno_maquina(tablero_maquina, tablero_jugador, registro_disparos_maquina, dificultad_maquina)
 
 
         #Verificamos si alguien ganó
-        if not np.any(tablero_jugador == simbolo_barco):  #Si no quedan barcos en el tablero del jugador la máquina ha ganado
-            print(Fore.RED + "\n¡La máquina ha hundido todos tus barcos! GAME OVER\n")
+        if not np.any(tablero_jugador.matriz == simbolo_barco):  #Si no quedan barcos en el tablero del jugador la máquina ha ganado
+            print(Fore.RED + "\n¡La máquina ha hundido todos tus barcos! GAME OVER\n" + Style.RESET_ALL)
             break
-        if not np.any(tablero_maquina == simbolo_barco):  #Si no quedan barcos en el tablero de la máquina el jugador ha ganado
-            print(Fore.GREEN + "\n¡Has hundido todos los barcos de la máquina! ¡Felicidades!\n")
+        if not np.any(tablero_maquina.matriz == simbolo_barco):  #Si no quedan barcos en el tablero de la máquina el jugador ha ganado
+            print(Fore.GREEN + "\n¡Has hundido todos los barcos de la máquina! ¡Felicidades!\n"+ Style.RESET_ALL)
             break
 
 
